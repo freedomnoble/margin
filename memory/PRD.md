@@ -31,6 +31,9 @@ A unit economics app that is dead simple for anyone who doesn't easily understan
 - Mobile: bottom tab nav, responsive layouts
 - Tested: iteration_1 — backend 100%, frontend 100%
 
+## Bug fixes (June 10, 2026)
+- "Save simulation doesn't save": root cause was UX, not persistence — editor reset to a blank draft after navigating away, and re-saving created duplicates. Fixed: saves now UPDATE the opened simulation (PUT) with "Save changes" label + editing indicator; "New" button starts a fresh plan; work-in-progress draft auto-persists to localStorage per business (StrictMode-safe pristine guard) and is restored on return/reload.
+
 ## Backlog (prioritized)
 - P1: Production hardening — CORS explicit origins, secure=True cookies (env-driven)
 - P1: Link saved simulations into money model steps (pull offers in instead of retyping)

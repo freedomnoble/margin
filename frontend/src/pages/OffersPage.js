@@ -183,20 +183,53 @@ export default function OffersPage() {
   const { current } = useBusiness();
   const [simName, setSimName] = useState("My first plan");
   const [offers, setOffers] = useState([newOffer("core")]);
+  const [currentSimId, setCurrentSimId] = useState(null);
   const [saved, setSaved] = useState([]);
   const [compareIds, setCompareIds] = useState([]);
   const [saving, setSaving] = useState(false);
 
+  const draftKey = current ? `margin_draft_${current.id}` : null;
+
   useEffect(() => {
     if (!current) return;
-    setOffers([newOffer("core")]);
-    setSimName("My first plan");
+    // Restore work-in-progress so nothing is ever "lost" when navigating away
+    let restored = false;
+    try {
+      const draft = JSON.parse(localStorage.getItem(`margin_draft_${current.id}`) || "null");
+      if (draft && Array.isArray(draft.offers) && draft.offers.length) {
+        setSimName(draft.simName || "My first plan");
+        setOffers(draft.offers);
+        setCurrentSimId(draft.currentSimId || null);
+        restored = true;
+      }
+    } catch {}
+    if (!restored) {
+      setOffers([newOffer("core")]);
+      setSimName("My first plan");
+      setCurrentSimId(null);
+    }
     setCompareIds([]);
     api
       .get(`/businesses/${current.id}/simulations`)
       .then(({ data }) => setSaved(data))
       .catch(() => setSaved([]));
   }, [current?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Keep the draft saved locally as the user types (never persist a pristine editor,
+  // so the restore effect can't be clobbered by an initial-state write)
+  const isPristine =
+    !currentSimId &&
+    simName === "My first plan" &&
+    offers.length === 1 &&
+    !offers[0].name &&
+    !offers[0].price &&
+    !offers[0].cost &&
+    !offers[0].unitsPerMonth;
+
+  useEffect(() => {
+    if (!draftKey || isPristine) return;
+    localStorage.setItem(draftKey, JSON.stringify({ simName, offers, currentSimId }));
+  }, [draftKey, simName, offers, currentSimId, isPristine]);
 
   if (!current) return null;
 
@@ -206,22 +239,34 @@ export default function OffersPage() {
   const saveSim = async () => {
     setSaving(true);
     try {
-      const { data } = await api.post(`/businesses/${current.id}/simulations`, {
-        name: simName.trim() || "Untitled",
-        offers,
-      });
-      setSaved((prev) => [data, ...prev]);
-      toast.success("Simulation saved");
+      const payload = { name: simName.trim() || "Untitled", offers };
+      if (currentSimId) {
+        const { data } = await api.put(`/simulations/${currentSimId}`, payload);
+        setSaved((prev) => prev.map((s) => (s.id === data.id ? data : s)));
+        toast.success(`"${data.name}" updated`);
+      } else {
+        const { data } = await api.post(`/businesses/${current.id}/simulations`, payload);
+        setSaved((prev) => [data, ...prev]);
+        setCurrentSimId(data.id);
+        toast.success(`Saved! Find it under "Saved simulations" below.`);
+      }
     } catch {
-      toast.error("Couldn't save. Try again.");
+      toast.error("Couldn't save. Check your connection and try again.");
     }
     setSaving(false);
+  };
+
+  const newSim = () => {
+    setSimName("Untitled plan");
+    setOffers([newOffer("core")]);
+    setCurrentSimId(null);
   };
 
   const loadSim = (sim) => {
     setSimName(sim.name);
     setOffers(sim.offers.length ? sim.offers : [newOffer("core")]);
-    toast.success(`Loaded "${sim.name}"`);
+    setCurrentSimId(sim.id);
+    toast.success(`Opened "${sim.name}" — changes will update it`);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -230,6 +275,7 @@ export default function OffersPage() {
       await api.delete(`/simulations/${sim.id}`);
       setSaved((prev) => prev.filter((s) => s.id !== sim.id));
       setCompareIds((prev) => prev.filter((id) => id !== sim.id));
+      if (currentSimId === sim.id) setCurrentSimId(null);
       toast.success("Deleted");
     } catch {
       toast.error("Couldn't delete.");
@@ -270,9 +316,24 @@ export default function OffersPage() {
               disabled={saving}
               className="bg-black text-white hover:bg-black/80 active:scale-[0.98] transition-all duration-200"
             >
-              <Save size={15} className="mr-2" /> {saving ? "Saving..." : "Save simulation"}
+              <Save size={15} className="mr-2" />{" "}
+              {saving ? "Saving..." : currentSimId ? "Save changes" : "Save simulation"}
+            </Button>
+            <Button
+              data-testid="new-simulation-button"
+              variant="outline"
+              onClick={newSim}
+              className="border-neutral-300 hover:border-black transition-colors duration-200"
+            >
+              <Plus size={14} className="mr-1.5" /> New
             </Button>
           </div>
+          {currentSimId && (
+            <p data-testid="editing-saved-indicator" className="text-xs text-neutral-400 -mt-1">
+              You're editing a saved simulation — "Save changes" updates it. Hit "New" to start a
+              fresh one.
+            </p>
+          )}
 
           {offers.map((o) => (
             <OfferCard
