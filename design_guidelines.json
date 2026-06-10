@@ -1,0 +1,120 @@
+{
+  "project_name": "Unit Economics Simplifier SaaS",
+  "theme": "light",
+  "archetype": "Archetype 4 (Swiss & High-Contrast - Minimalist Premium)",
+  "vibe": "Clean, minimal, simple white and black. Premium feel, snappy, and dead simple for non-financial users.",
+  "colors": {
+    "background": "#FFFFFF",
+    "foreground": "#0A0A0A",
+    "primary": "#000000",
+    "primary_foreground": "#FFFFFF",
+    "secondary": "#F5F5F5",
+    "secondary_foreground": "#1A1A1A",
+    "muted": "#FAFAFA",
+    "muted_foreground": "#737373",
+    "border": "#E5E5E5",
+    "input": "#E5E5E5",
+    "ring": "#000000",
+    "radius": "0.25rem",
+    "shadows": {
+      "sm": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+      "md": "0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05)",
+      "lg": "0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05)",
+      "premium_glow": "0 0 40px -10px rgba(0, 0, 0, 0.1)"
+    }
+  },
+  "typography": {
+    "headings": {
+      "font_family": "Cabinet Grotesk, sans-serif",
+      "weight": "800",
+      "tracking": "tracking-tight"
+    },
+    "body": {
+      "font_family": "Satoshi, sans-serif",
+      "weight": "400",
+      "tracking": "tracking-normal"
+    },
+    "sizes": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl",
+      "h3": "text-xl sm:text-2xl",
+      "body": "text-base",
+      "small": "text-sm",
+      "tiny_label": "text-xs uppercase tracking-widest"
+    }
+  },
+  "layout_and_spacing": {
+    "philosophy": "Generous spacing. Use p-8 or p-12 for containers to breathe. Minimalist luxury.",
+    "dashboard_grid": "Bento Grid protocol. grid-cols-1 md:grid-cols-3 lg:grid-cols-4 with gap-6. Flat solid surfaces, 1px borders.",
+    "alignment": "Left-align dense content and forms. Center-align hero text or empty states.",
+    "mobile_constraints": "Images max-h-[80vh]. Stack grids on mobile."
+  },
+  "components": {
+    "general": "Use pure HTML/Tailwind for structural layouts. Use customized Shadcn for interactive logic (dropdowns, forms).",
+    "surfaces": "Cardless or subtle 1px border. Background matches parent (pure white or off-white). Avoid heavy shadows, use crisp borders.",
+    "tooltips": "CRITICAL: Implement Shadcn Tooltip for ALL financial jargon (LTV, CAC, ICP, GP) as requested. Tooltips must be dark gray with white text.",
+    "buttons": "Primary: Solid black with white text. Hover: bg-black/80. Secondary: White bg, 1px black border. Hover: bg-gray-50.",
+    "inputs": "Shadcn input, minimal border. Focus state: ring-2 ring-black. No colored rings.",
+    "icons": "Use @phosphor-icons/react (Duotone or Regular weight). Keep it elegant and legible."
+  },
+  "motion_and_interactions": {
+    "general": "Framer Motion for page transitions (fade and slight upward slide). Parallax scrolling on landing/dashboard banners.",
+    "hover_states": "Snappy but smooth. transition-all duration-200. Buttons scale down slightly (active:scale-95).",
+    "modals": "Backdrop blur on overlays (backdrop-blur-sm bg-black/20). Content slides in from bottom."
+  },
+  "accessibility": {
+    "contrast": "Ensure minimum 4.5:1 for normal text. Use APCA calculator guidelines.",
+    "testing": "All interactive elements MUST include a data-testid attribute (e.g. data-testid='business-switcher').",
+    "tooltips_accessibility": "Ensure tooltips are keyboard focusable."
+  },
+  "pages": {
+    "login_register": {
+      "layout": "Split screen. Left: minimalist brand abstract image. Right: Clean form.",
+      "features": "Email/password, simple minimal inputs."
+    },
+    "dashboard": {
+      "layout": "Bento Grid.",
+      "features": "Business switcher dropdown (like Slack) in the top-left header. Value prop banner prominent at the top. Grid showing one-sentence offers, CAC profit, 30-day GP, 12-month LTV."
+    },
+    "unit_economics": {
+      "layout": "Side-by-side or stacked simulation panels.",
+      "features": "Define Base/Core/Upsell offers. Input fields for unit definition and costs. 'Save Simulation' button. 'Compare' side-by-side view."
+    },
+    "money_models": {
+      "layout": "Card grid for Hormozi 100M models.",
+      "features": "Simple explanations. 'WHEN to offer' timeline. LTV/CAC modeling calculators. 30-day projections based on 'X' customers input."
+    },
+    "customer_journey": {
+      "layout": "Horizontal scrolling timeline or vertical stepper.",
+      "features": "End-to-end journey mapping. Pain points selection. 'Create Offer' button tied to pain points. ICP & Value Prop sticky side panel. 'Export PDF' button."
+    }
+  },
+  "media": {
+    "image_urls": [
+      {
+        "url": "https://images.unsplash.com/photo-1619252584172-a83a949b6efd?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODl8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMG1pbmltYWwlMjB3aGl0ZSUyMGFuZCUyMGJsYWNrJTIwdGV4dHVyZXxlbnwwfHx8fDE3ODEwNjE2OTV8MA&ixlib=rb-4.1.0&q=85",
+        "category": "login_background",
+        "description": "A blurry white abstract background for the login screen."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1533135091724-62cc5402aa20?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODl8MHwxfHNlYXJjaHwyfHxhYnN0cmFjdCUyMG1pbmltYWwlMjB3aGl0ZSUyMGFuZCUyMGJsYWNrJTIwdGV4dHVyZXxlbnwwfHx8fDE3ODEwNjE2OTV8MA&ixlib=rb-4.1.0&q=85",
+        "category": "hero_texture",
+        "description": "Black and white abstract background with wavy lines, useful for banners or parallax."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1532456745301-b2c645d8b80d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTF8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwcHJlbWl1bSUyMGFyY2hpdGVjdHVyZSUyMGJhY2tncm91bmR8ZW58MHx8fGJsYWNrX2FuZF93aGl0ZXwxNzgxMDYxNjk1fDA&ixlib=rb-4.1.0&q=85",
+        "category": "architectural_accent",
+        "description": "Minimalist premium architecture background for empty states or dashboard accents."
+      }
+    ]
+  },
+  "instructions_to_main_agent": {
+    "1": "Strictly adhere to the black and white minimalist color palette. Do not add colored buttons or gradients.",
+    "2": "All .js files should be used, no .tsx.",
+    "3": "Crucial: Implement tooltips for all financial terms like LTV, CAC, ICP, GP using Shadcn UI.",
+    "4": "Ensure 'data-testid' attributes are placed on all interactive elements as requested.",
+    "5": "Install @phosphor-icons/react for icons.",
+    "6": "Install framer-motion for the requested animations and parallax scrolling.",
+    "7": "Maintain generous padding (p-8, p-12) for a high-end luxury feel."
+  }
+}
